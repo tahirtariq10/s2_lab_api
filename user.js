@@ -1,15 +1,58 @@
-$(document).ready(function () {
-    show_users(); 
+$(function() {
+    loadUsers();
+    $("#users").on("click", ".btn-warning", handleUpdate);
+
 });
-function show_users(){
+
+
+function ValidateEmail(mail) 
+{
+     var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    var mail = prompt("Enter Updated Mail:", "");
+    if(mail.match(mailformat))
+    {
+        alert("Your Email is updated")
+        return (true)
+    }
+        alert("You have entered an invalid email address!")
+        return (false)
+}
+
+
+function handleUpdate() {
+    if(ValidateEmail()) {        
+        var btn = $(this);
+        var parentDiv = btn.closest(".recipe");
+        let id = parentDiv.attr("data-id");
+        $.get("https://jsonplaceholder.typicode.com/albums/" + id, function(response) {
+        
+        });
+    }
+  }
+
+function loadUsers() {
     $.ajax({
-        meyhod : 'GET',
-        url: "https://jsonplaceholder.typicode.com/users",
-        success: function (response) {
-            response.forEach(function(temp) {
-                // console.log(temp.name);
-                $('#t_body').append("<tr ><td>"+temp.name+"</td><td>"+temp.email+"</td><td><a  href='./albums/"+temp.id+"'><button  class='btn btn-primary albums'>Albums</button></a></td><td><button class='btn btn-primary update' >Update</button></td></tr>");
-            });
+      url: "https://jsonplaceholder.typicode.com/users",
+      method: "GET",
+      error: function(response) {
+        var users = $("#users");
+        users.html("An Error has occured");
+      },
+      success: function(response) {
+        console.log(response);
+        var users = $("#users");
+        users.empty();
+        for (var i = 0; i < response.length; i++) {
+          var us = response[i];
+          users.append(
+            `<div class="user container" data-id="${us._id}">
+            <h3>UserName: ${us.username}</h3>
+            <h5>Name: ${us.name}</h5>
+            <p>
+            <button class="btn btn-warning btn-sm float-right">Update Email</button> 
+            Email: ${us.email}</p></div>`
+          );
         }
-    });
+      }
+    })
 }
