@@ -14,7 +14,7 @@ function handleDelete() {
       method: "DELETE",
       error: function(response) {
         var albums = $("#albums");
-        albums.html("An Error has occured");
+        albums.html("Error occured");
       },
       success: function() {
         loadAlbums();
@@ -28,7 +28,7 @@ function loadAlbums() {
       method: "GET",
       error: function(response) {
         var albums = $("#albums");
-        albums.html("An Error has occured");
+        albums.html("Error occured");
       },
       success: function(response) {
         console.log(response);
